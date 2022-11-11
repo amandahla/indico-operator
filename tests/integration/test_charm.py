@@ -36,6 +36,25 @@ async def test_indico_is_up(ops_test: OpsTest, app: Application):
     )
     assert response.status_code == 200
 
+@pytest.mark.asyncio
+@pytest.mark.abort_on_fail
+async def test_bootstrap_is_done(ops_test: OpsTest, app: Application):
+    """Check that the bootstrap page is done.
+
+    Assume that the charm has already been built, is running and is up.
+    """
+    # Read the IP address of indico
+    status = await ops_test.model.get_status()
+    unit = list(status.applications[app.name].units)[0]
+    address = status["applications"][app.name]["units"][unit]["address"]
+    # Send request to bootstrap page and set Host header to app_name (which the application
+    # expects)
+    data = 'csrf_token=00000000-0000-0000-0000-000000000000&first_name=admin&last_name=admin&email=admin%40admin.com&username=admin&password=lunarlobster&confirm_password=lunarlobster&affiliation=Canonical'
+
+    response = requests.post(
+        f"http://{address}:8080/bootstrap", headers={"Host": f"{app.name}.local"},data=data
+    )
+    assert response.status_code == 302
 
 @pytest.mark.asyncio
 @pytest.mark.abort_on_fail
