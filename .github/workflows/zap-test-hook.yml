@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  hook-test:
-    uses: zaproxy/action-full-scan@v0.4.0
-    with:
-        target: 'https://www.zaproxy.org/'
-        cmd_options: '--hook "tests/zap/testhook.py"'
+  do-hook-test:
+    name: hook-test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: step1
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+            target: 'https://www.zaproxy.org/'
+            cmd_options: '--hook "tests/zap/hook.py"'
