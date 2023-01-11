@@ -11,7 +11,6 @@ jobs:
       chaos-enabled: false
       chaos-experiments: pod-delete
       chaos-app-label: app.kubernetes.io/name=indico
-      skip-integration-tests: true
       zap-dast-enabled: true
       zap-auth-header: Host
       zap-auth-header-value: indico.local
